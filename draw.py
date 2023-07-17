@@ -8,15 +8,16 @@ def generate_map(length: int, trash_ratio: float, obstacle_ratio: float, mountai
     terrain = [[map_ptr[i][j] for i in range(length)] for j in range(length)]
     return terrain
 
-def visualize(length: int) -> None:
-    image = Image.new("RGB", (length, length), "white")
+
+def visualize(width: int, height: int) -> None:
+    image = Image.new("RGB", (width, height), "white")
     draw = ImageDraw.Draw(image)
     for i in range(len(terrain)):
         for j in range(len(terrain[0])):
             fill_color = color_map[terrain[i][j]]
             draw.rectangle([(i + 100 * i, j + 100 * j), (i + 100 + 100 * i, j + 100 + 100 * j)], fill = fill_color)
 
-    image.save("result.png")
+    image.show()
 
 def main():
     global terrain

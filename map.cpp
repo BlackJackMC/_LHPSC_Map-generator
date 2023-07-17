@@ -6,7 +6,6 @@
 #include <iso646.h>
 #include <chrono>
 #include <random>
-#include <functional>
 
 namespace py = pybind11;
 using namespace std;
@@ -87,8 +86,9 @@ void generate_trash_mask()
 
 vector<vector<int>> generate_map(int length, double trash_ratio, double obstacle_ratio, double mountain_ratio)
 {
-    game_map.resize(length, vector<int>(length, 0));
-    trash_mask.resize(length, vector<int>(length, 0));
+    freopen("terrain.txt", "w", stdout);
+    game_map.resize(8, vector<int>(8, 0));
+    trash_mask.resize(8, vector<int>(8, 0));
     auto is_empty_around = [](int i, int j) 
     {
         for (int k = 0; k < 4; k++)
@@ -139,8 +139,8 @@ vector<vector<int>> generate_map(int length, double trash_ratio, double obstacle
         }
         return true;
     };
-    put(TRASH, is_empty_around, trash_ratio);
-    put(OBSTACLE, is_the_same_around, obstacle_ratio);
+    put(TRASH, is_empty_around, 0.3);
+    put(OBSTACLE, is_the_same_around, 0.3);
     generate_trash_mask();
     put(MOUNTAIN, is_not_blocking_path, mountain_ratio);
     return game_map;
@@ -151,8 +151,3 @@ PYBIND11_MODULE(game_map, handle)
 	handle.doc() = "[SM2223] Generate random map";
 	handle.def("generate_map", &generate_map);
 }
-
-
-
-
-
