@@ -1,6 +1,9 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <iso646.h>
 #include <chrono>
 #include <random>
+#include <functional>
 
 using namespace std;
 using namespace chrono;
@@ -78,11 +81,10 @@ void generate_trash_mask()
     }
 }
 
-int main()
+extern "C" vector<vector<int>> generate_map(int length, double trash_ratio, double obstacle_ratio, double mountain_ratio)
 {
-    freopen("terrain.txt", "w", stdout);
-    game_map.resize(8, vector<int>(8, 0));
-    trash_mask.resize(8, vector<int>(8, 0));
+    game_map.resize(length, vector<int>(length, 0));
+    trash_mask.resize(length, vector<int>(length, 0));
     auto is_empty_around = [](int i, int j) 
     {
         for (int k = 0; k < 4; k++)
@@ -133,9 +135,9 @@ int main()
         }
         return true;
     };
-    put(TRASH, is_empty_around, 0.3);
-    put(OBSTACLE, is_the_same_around, 0.3);
+    put(TRASH, is_empty_around, trash_ratio);
+    put(OBSTACLE, is_the_same_around, obstacle_ratio);
     generate_trash_mask();
-    put(MOUNTAIN, is_not_blocking_path, 0.8);
-    print();
+    put(MOUNTAIN, is_not_blocking_path, mountain_ratio);
+    return game_map;
 }
