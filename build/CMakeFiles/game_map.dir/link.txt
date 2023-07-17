@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -flto -shared  -o game_map.cpython-39-x86_64-linux-gnu.so CMakeFiles/game_map.dir/map.cpp.o 

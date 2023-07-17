@@ -1,12 +1,10 @@
 from PIL import Image, ImageDraw
-import ctypes
+import game_map
 
 color_map = dict({0:(3, 190, 252), 1:(252, 186, 3), 2:(255, 0, 0), 3:(0, 0, 0)})
 
-def generate_map(length: int) -> list:
-    map = ctypes.CDLL('F:\Project\_LHPSC_Map-generator\map.dll')
-    map.generate_map.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_int))
-    map_ptr = map.generate_map()
+def generate_map(length: int, trash_ratio: float, obstacle_ratio: float, mountain_ratio: float) -> list:
+    map_ptr = game_map.generate_map(8, trash_ratio, obstacle_ratio, mountain_ratio)
     terrain = [[map_ptr[i][j] for i in range(length)] for j in range(length)]
     return terrain
 
@@ -24,7 +22,10 @@ def main():
     global terrain
 
     length: int = 8 
-    terrain = generate_map(length)
+    trash_ratio = float(input())
+    obstacle_ratio = float(input())
+    mountain_ratio = float(input())
+    terrain = generate_map(length, trash_ratio, obstacle_ratio, mountain_ratio)
     visualize(length * 100)
 
 

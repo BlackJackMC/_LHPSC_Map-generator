@@ -1,3 +1,6 @@
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+
 #include <iostream>
 #include <vector>
 #include <iso646.h>
@@ -5,6 +8,7 @@
 #include <random>
 #include <functional>
 
+namespace py = pybind11;
 using namespace std;
 using namespace chrono;
 
@@ -81,7 +85,7 @@ void generate_trash_mask()
     }
 }
 
-extern "C" vector<vector<int>> generate_map(int length, double trash_ratio, double obstacle_ratio, double mountain_ratio)
+vector<vector<int>> generate_map(int length, double trash_ratio, double obstacle_ratio, double mountain_ratio)
 {
     game_map.resize(length, vector<int>(length, 0));
     trash_mask.resize(length, vector<int>(length, 0));
@@ -141,3 +145,14 @@ extern "C" vector<vector<int>> generate_map(int length, double trash_ratio, doub
     put(MOUNTAIN, is_not_blocking_path, mountain_ratio);
     return game_map;
 }
+
+PYBIND11_MODULE(game_map, handle)
+{
+	handle.doc() = "[SM2223] Generate random map";
+	handle.def("generate_map", &generate_map);
+}
+
+
+
+
+
